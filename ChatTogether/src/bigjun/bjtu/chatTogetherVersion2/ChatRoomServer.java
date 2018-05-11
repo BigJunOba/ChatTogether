@@ -101,13 +101,4 @@ public class ChatRoomServer {
 
 		}
 	}
-
-	// 程序入口main方法
-	public static void main(String[] args) {
-		try {
-			new ChatRoomServer().startService();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
