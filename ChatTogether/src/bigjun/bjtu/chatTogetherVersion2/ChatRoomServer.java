@@ -19,7 +19,7 @@ public class ChatRoomServer {
 		try {
 			// 开启服务器，并绑定到8023端口
 			ss = new ServerSocket(8023);
-			System.out.println("服务器已启动！");
+//			System.out.println("服务器已启动！");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

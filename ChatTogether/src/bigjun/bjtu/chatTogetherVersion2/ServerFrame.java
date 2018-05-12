@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -28,15 +30,19 @@ public class ServerFrame extends JFrame {
 
 	private JPanel panel2;            // 文字显示面板
 	
-	private JTextArea area;           // 信息接收文本域
+	private static JTextArea area;           // 信息接收文本域
 
 	private JButton button;           // 发送按钮
+	
+	private ChatRoomServer CRServer;
 
 	//构造函数
 	public ServerFrame() {
 		
+		CRServer = new ChatRoomServer();
+		
 		area = new JTextArea(20, 20);
-		button = new JButton("断开");
+		button = new JButton("关闭服务器");
 		panel1 = new backgroundJPanel1();
 		panel2 = new backgroundJPanel2();
 
@@ -66,6 +72,9 @@ public class ServerFrame extends JFrame {
 		
 		//下方面板，布局位置为南
 		this.add(panel1, BorderLayout.SOUTH);
+		
+		setConsoleMessateToArea();
+		System.out.println("服务器已启动！");
 	}
 
 	// 显示窗口方法
@@ -75,7 +84,7 @@ public class ServerFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);   // 点击右上角的叉号，不做任何操作
 		this.setResizable(false);                                    // 不可改变窗口大小
 		try {
-			new ChatRoomServer().startService();
+			CRServer.startService();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}                    
@@ -95,7 +104,7 @@ public class ServerFrame extends JFrame {
 			//窗口关闭时的处理方法
 			public void windowClosing(WindowEvent atg0) {
 				// 弹出提示框的内容
-				int op = JOptionPane.showConfirmDialog(ServerFrame.this,"请选择是或否：", "退出聊天室？", JOptionPane.YES_NO_OPTION);
+				int op = JOptionPane.showConfirmDialog(ServerFrame.this,"请选择是或否：", "关闭服务器？", JOptionPane.YES_NO_OPTION);
 				// 如果选择确定
 				if (op == JOptionPane.YES_OPTION) {
 					//TODO
@@ -114,7 +123,7 @@ public class ServerFrame extends JFrame {
 		Image image;
 		
 		public backgroundJPanel1() {
-			icon = new ImageIcon("background/bg01.jpg");
+			icon = new ImageIcon(getClass().getResource("/background/bg01.jpg"));
 			image = icon.getImage();
 		}
 		
@@ -133,8 +142,8 @@ public class ServerFrame extends JFrame {
 		Image img;
 		
 		public backgroundJPanel2() {
-			img = new ImageIcon("background/Me.jpg").getImage();
-			setPreferredSize(new Dimension(713, 583));
+			img = new ImageIcon(getClass().getResource("/background/bg03.jpg")).getImage();
+			setPreferredSize(new Dimension(540, 908));
 			this.setOpaque(false);
 			this.setLayout(new BorderLayout());
 		}
@@ -146,9 +155,32 @@ public class ServerFrame extends JFrame {
 		}
 	}
 	
+	public void setConsoleMessateToArea() {
+		
+		OutputStream textAreaStream = new OutputStream() {
+			
+			@Override
+			public void write(int b) throws IOException {
+				area.append(String.valueOf((char)b));
+			}
+			
+			public void write(byte b[], int off, int len) throws IOException {
+				area.append(new String(b, off, len));
+			}
+			
+			public void write(byte b[]) throws IOException {
+				area.append(new String(b));
+			}
+		};
+		
+		PrintStream myOut = new PrintStream(textAreaStream);
+		System.setOut(myOut);
+		System.setErr(myOut);
+		
+	}
 
 	// 程序入口main方法
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		new ServerFrame().showMe();
 	}
 }
