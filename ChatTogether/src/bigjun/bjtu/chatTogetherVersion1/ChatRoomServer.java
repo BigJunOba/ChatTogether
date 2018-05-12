@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
@@ -18,7 +20,8 @@ public class ChatRoomServer {
 	public ChatRoomServer() {
 		try {
 			// 开启服务器，并绑定到8023端口
-			ss = new ServerSocket(8023);
+			ss = new ServerSocket();
+			ss.bind(new InetSocketAddress("0.0.0.0", 8023));
 			System.out.println("服务器已启动！");
 		} catch (IOException e) {
 			e.printStackTrace();

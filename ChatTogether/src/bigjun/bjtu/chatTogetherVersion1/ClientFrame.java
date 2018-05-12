@@ -175,7 +175,7 @@ public class ClientFrame extends JFrame {
 		Image image;
 		
 		public backgroundJPanel1() {
-			icon = new ImageIcon("background/bg01.jpg");
+			icon = new ImageIcon(getClass().getResource("/background/bg01.jpg"));
 			image = icon.getImage();
 		}
 		
@@ -194,7 +194,7 @@ public class ClientFrame extends JFrame {
 		Image img;
 		
 		public backgroundJPanel2() {
-			img = new ImageIcon("background/Me.jpg").getImage();
+			img = new ImageIcon(getClass().getResource("/background/Me.jpg")).getImage();
 			setPreferredSize(new Dimension(713, 583));
 			this.setOpaque(false);
 			this.setLayout(new BorderLayout());
